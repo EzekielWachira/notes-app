@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Notes App</string>
-    <string name="my_notes">My Notes</string>
-    <string name="search_notes">Search Notes</string>
-    <string name="note_title">Note title</string>
-    <string name="note_subtitle">Note subtitle</string>
-    <string name="type_note">Type note here</string>
+    <string title="app_name">Notes App</string>
+    <string title="my_notes">My Notes</string>
+    <string title="search_notes">Search Notes</string>
+    <string title="note_title">Note title</string>
+    <string title="note_subtitle">Note subtitle</string>
+    <string title="type_note">Type note here</string>
 </resources>

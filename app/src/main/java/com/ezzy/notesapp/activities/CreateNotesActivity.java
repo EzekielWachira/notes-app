@@ -1,10 +1,12 @@
-package com.ezzy.notesapp;
+package com.ezzy.notesapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.ezzy.notesapp.R;
 
 public class CreateNotesActivity extends AppCompatActivity {
 
@@ -14,11 +16,6 @@ public class CreateNotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_notes);
 
         ImageView imageBackButton = findViewById(R.id.imageBack);
-        imageBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        imageBackButton.setOnClickListener(v -> onBackPressed());
     }
 }
