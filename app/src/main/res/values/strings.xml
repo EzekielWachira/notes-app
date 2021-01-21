@@ -8,4 +8,6 @@
     <string name="note_title_error">Note Title cannot be empty</string>
     <string name="note_subtitle_err">Note subtitle cannot be empty</string>
     <string name="note_text_err">Note body cannot be empty</string>
+    <string name="miscellaneous">Miscellaneous</string>
+    <string name="pick_colors">Pick colors</string>
 </resources>
