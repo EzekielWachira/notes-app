@@ -10,4 +10,8 @@
     <string name="note_text_err">Note body cannot be empty</string>
     <string name="miscellaneous">Miscellaneous</string>
     <string name="pick_colors">Pick colors</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_url">Add Url</string>
+    <string name="url">Url</string>
+    <string name="notes">Notes</string>
 </resources>
