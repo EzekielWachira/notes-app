@@ -63,6 +63,8 @@ public class CreateNotesActivity extends AppCompatActivity {
 
     private AlertDialog dialogAddUrl;
 
+    private Note savedNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +98,31 @@ public class CreateNotesActivity extends AppCompatActivity {
         selectedColor = "#FFFFFF";
         selectedImagePath = "";
 
+        if (getIntent().getBooleanExtra("isViewOrUpdate", false)){
+            savedNote = (Note) getIntent().getSerializableExtra("note");
+            setOrUpdateNote();
+        }
+
         initMiscellaneous();
 
         setSubtitleIndicatorColor();
+    }
+
+    private void setOrUpdateNote(){
+        inputNoteTitle.setText(savedNote.getTitle());
+        inputNoteSubtitle.setText(savedNote.getSubtitle());
+        inputNoteText.setText(savedNote.getNoteText());
+        textDateTime.setText(savedNote.getDateTime());
+
+        if (savedNote.getImagePath() != null){
+            noteImage.setImageBitmap(BitmapFactory.decodeFile(savedNote.getImagePath()));
+            noteImage.setVisibility(View.VISIBLE);
+            selectedImagePath = savedNote.getImagePath();
+        }
+
+        if (savedNote.getWebLink() != null && !savedNote.getWebLink().trim().isEmpty()){
+            textWebUrl.setText(savedNote.getWebLink());
+        }
     }
 
     private void saveNote(){
@@ -119,6 +143,11 @@ public class CreateNotesActivity extends AppCompatActivity {
 
         if (layoutWebUrl.getVisibility() == View.VISIBLE){
             note.setWebLink(textWebUrl.getText().toString());
+        }
+
+        if (savedNote.getWebLink() != null){
+             note.setId(savedNote.getId());
+            layoutWebUrl.setVisibility(View.VISIBLE);
         }
 
         //doing operations on the background to avoid app freeze
@@ -217,7 +246,7 @@ public class CreateNotesActivity extends AppCompatActivity {
                 setSubtitleIndicatorColor();
             }
         });
-        layoutMiscellaneous.findViewById(R.id.viewColor4).setOnClickListener(new View.OnClickListener() {
+        layoutMiscellaneous.findViewById(R.id.viewColor5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedColor = "#000000";
@@ -229,6 +258,25 @@ public class CreateNotesActivity extends AppCompatActivity {
                 setSubtitleIndicatorColor();
             }
         });
+
+        if (savedNote != null && savedNote.getColor() != null && !savedNote.getColor().trim().isEmpty()){
+            switch (savedNote.getColor()){
+                case "#FDBE3B":
+                    layoutMiscellaneous.findViewById(R.id.viewColor2).performClick();
+                    break;
+                case "#FF4842":
+                    layoutMiscellaneous.findViewById(R.id.viewColor3).performClick();
+                    break;
+                case "#3A52FC":
+                    layoutMiscellaneous.findViewById(R.id.viewColor4).performClick();
+                    break;
+                case "#000000":
+                    layoutMiscellaneous.findViewById(R.id.viewColor5).performClick();
+                    break;
+                default:
+                    layoutMiscellaneous.findViewById(R.id.viewColor1).performClick();
+            }
+        }
 
         layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,7 +398,7 @@ public class CreateNotesActivity extends AppCompatActivity {
             filePath = uri.getPath();
         } else {
              cursor.moveToFirst();
-             int index = cursor.getColumnIndex("'_data");
+             int index = cursor.getColumnIndex("_data");
              filePath = cursor.getString(index);
              cursor.close();
         }

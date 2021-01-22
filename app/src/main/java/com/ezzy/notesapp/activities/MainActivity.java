@@ -15,16 +15,21 @@ import com.ezzy.notesapp.R;
 import com.ezzy.notesapp.adapters.NoteAdapter;
 import com.ezzy.notesapp.database.NoteDatabase;
 import com.ezzy.notesapp.entities.Note;
+import com.ezzy.notesapp.listeners.NoteListListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NoteListListener {
 
     public static final int REQUEST_CODE_ADD_NOTE = 1;
+    public static final int REQUEST_CODE_UPDATE_NOTE = 2;
+
     private RecyclerView noteRecyclerView;
     private List<Note> noteList;
     private NoteAdapter noteAdapter;
+
+    private int noteClickeddPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +53,19 @@ public class MainActivity extends AppCompatActivity {
         ));
 
         noteList = new ArrayList<>();
-        noteAdapter = new NoteAdapter(noteList);
+        noteAdapter = new NoteAdapter(noteList, this);
         noteRecyclerView.setAdapter(noteAdapter);
 
         getNotes();
+    }
+
+    @Override
+    public void onNoteClicked(Note note, int position) {
+        noteClickeddPosition = position;
+        Intent intent = new Intent(getApplicationContext(), CreateNotesActivity.class);
+        intent.putExtra("isViewOrUpdate", true);
+        intent.putExtra("note", note);
+        startActivityForResult(intent, REQUEST_CODE_UPDATE_NOTE);
     }
 
     private void getNotes() {
