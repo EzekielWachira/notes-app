@@ -19,4 +19,5 @@
     <string name="cancel">Cancel</string>
     <string name="delete_note">Delete Note</string>
     <string name="delete_note_confirm">Are you sure you want to delete note?</string>
+    <string name="permission_err">Permission denied</string>
 </resources>
