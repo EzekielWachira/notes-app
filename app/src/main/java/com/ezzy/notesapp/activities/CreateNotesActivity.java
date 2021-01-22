@@ -89,12 +89,7 @@ public class CreateNotesActivity extends AppCompatActivity {
         );
 
         ImageView imageSave = findViewById(R.id.imageSave);
-        imageSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveNote();
-            }
-        });
+        imageSave.setOnClickListener(v -> saveNote());
 
         selectedColor = "#FFFFFF";
         selectedImagePath = "";
@@ -195,14 +190,11 @@ public class CreateNotesActivity extends AppCompatActivity {
     private void initMiscellaneous(){
         final LinearLayout layoutMiscellaneous = findViewById(R.id.layoutMiscellaneous);
         final BottomSheetBehavior<LinearLayout> bottomSheetBehavior = BottomSheetBehavior.from(layoutMiscellaneous);
-        layoutMiscellaneous.findViewById(R.id.textMisc).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+        layoutMiscellaneous.findViewById(R.id.textMisc).setOnClickListener(v -> {
+            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
@@ -212,65 +204,50 @@ public class CreateNotesActivity extends AppCompatActivity {
         final ImageView imageColor4 = layoutMiscellaneous.findViewById(R.id.imageColor4);
         final ImageView imageColor5 = layoutMiscellaneous.findViewById(R.id.imageColor5);
 
-        layoutMiscellaneous.findViewById(R.id.viewColor1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedColor = "#333333";
-                imageColor1.setImageResource(R.drawable.ic_done);
-                imageColor2.setImageResource(0);
-                imageColor3.setImageResource(0);
-                imageColor4.setImageResource(0);
-                imageColor5.setImageResource(0);
-                setSubtitleIndicatorColor();
-            }
+        layoutMiscellaneous.findViewById(R.id.viewColor1).setOnClickListener(v -> {
+            selectedColor = "#333333";
+            imageColor1.setImageResource(R.drawable.ic_done);
+            imageColor2.setImageResource(0);
+            imageColor3.setImageResource(0);
+            imageColor4.setImageResource(0);
+            imageColor5.setImageResource(0);
+            setSubtitleIndicatorColor();
         });
-        layoutMiscellaneous.findViewById(R.id.viewColor2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedColor = "#FDBE3B";
-                imageColor1.setImageResource(0);
-                imageColor2.setImageResource(R.drawable.ic_done);
-                imageColor3.setImageResource(0);
-                imageColor4.setImageResource(0);
-                imageColor5.setImageResource(0);
-                setSubtitleIndicatorColor();
-            }
+        layoutMiscellaneous.findViewById(R.id.viewColor2).setOnClickListener(v -> {
+            selectedColor = "#FDBE3B";
+            imageColor1.setImageResource(0);
+            imageColor2.setImageResource(R.drawable.ic_done);
+            imageColor3.setImageResource(0);
+            imageColor4.setImageResource(0);
+            imageColor5.setImageResource(0);
+            setSubtitleIndicatorColor();
         });
-        layoutMiscellaneous.findViewById(R.id.viewColor3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedColor = "#FF4842";
-                imageColor1.setImageResource(0);
-                imageColor2.setImageResource(0);
-                imageColor3.setImageResource(R.drawable.ic_done);
-                imageColor4.setImageResource(0);
-                imageColor5.setImageResource(0);
-                setSubtitleIndicatorColor();
-            }
+        layoutMiscellaneous.findViewById(R.id.viewColor3).setOnClickListener(v -> {
+            selectedColor = "#FF4842";
+            imageColor1.setImageResource(0);
+            imageColor2.setImageResource(0);
+            imageColor3.setImageResource(R.drawable.ic_done);
+            imageColor4.setImageResource(0);
+            imageColor5.setImageResource(0);
+            setSubtitleIndicatorColor();
         });
-        layoutMiscellaneous.findViewById(R.id.viewColor4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedColor = "#3A52FC";
-                imageColor1.setImageResource(0);
-                imageColor2.setImageResource(0);
-                imageColor3.setImageResource(0);
-                imageColor4.setImageResource(R.drawable.ic_done);
-                imageColor5.setImageResource(0);
-                setSubtitleIndicatorColor();
-            }
+        layoutMiscellaneous.findViewById(R.id.viewColor4).setOnClickListener(v -> {
+            selectedColor = "#3A52FC";
+            imageColor1.setImageResource(0);
+            imageColor2.setImageResource(0);
+            imageColor3.setImageResource(0);
+            imageColor4.setImageResource(R.drawable.ic_done);
+            imageColor5.setImageResource(0);
+            setSubtitleIndicatorColor();
         });
-        layoutMiscellaneous.findViewById(R.id.viewColor5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedColor = "#000000";
-                imageColor1.setImageResource(0);
-                imageColor2.setImageResource(0);
-                imageColor3.setImageResource(0);
-                imageColor4.setImageResource(0);
-                imageColor5.setImageResource(R.drawable.ic_done);
-                setSubtitleIndicatorColor();
-            }
+        layoutMiscellaneous.findViewById(R.id.viewColor5).setOnClickListener(v -> {
+            selectedColor = "#000000";
+            imageColor1.setImageResource(0);
+            imageColor2.setImageResource(0);
+            imageColor3.setImageResource(0);
+            imageColor4.setImageResource(0);
+            imageColor5.setImageResource(R.drawable.ic_done);
+            setSubtitleIndicatorColor();
         });
 
         if (savedNote != null && savedNote.getColor() != null && !savedNote.getColor().trim().isEmpty()){
@@ -292,20 +269,17 @@ public class CreateNotesActivity extends AppCompatActivity {
             }
         }
 
-        layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                if (ContextCompat.checkSelfPermission(
-                        getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED
-                ){
-                    ActivityCompat.requestPermissions(CreateNotesActivity.this,
-                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
-                            REQUEST_STORAGE_PERMISSION_CODE);
-                } else {
-                    selectImage();
-                }
+        layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            if (ContextCompat.checkSelfPermission(
+                    getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED
+            ){
+                ActivityCompat.requestPermissions(CreateNotesActivity.this,
+                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_STORAGE_PERMISSION_CODE);
+            } else {
+                selectImage();
             }
         });
 
@@ -389,27 +363,19 @@ public class CreateNotesActivity extends AppCompatActivity {
             final EditText inputUrl = view.findViewById(R.id.inputUrl);
             inputUrl.requestFocus();
 
-            view.findViewById(R.id.textAdd).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isTextEmpty(inputUrl)) {
-                        makeToast("Enter some text");
-                    } else if (!Patterns.WEB_URL.matcher(inputUrl.getText().toString()).matches()){
-                        makeToast("Enter valid URL");
-                    } else {
-                        textWebUrl.setText(inputUrl.getText().toString());
-                        layoutWebUrl.setVisibility(View.VISIBLE);
-                        dialogAddUrl.dismiss();
-                    }
-                }
-            });
-
-            view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            view.findViewById(R.id.textAdd).setOnClickListener(v -> {
+                if (isTextEmpty(inputUrl)) {
+                    makeToast("Enter some text");
+                } else if (!Patterns.WEB_URL.matcher(inputUrl.getText().toString()).matches()){
+                    makeToast("Enter valid URL");
+                } else {
+                    textWebUrl.setText(inputUrl.getText().toString());
+                    layoutWebUrl.setVisibility(View.VISIBLE);
                     dialogAddUrl.dismiss();
                 }
             });
+
+            view.findViewById(R.id.textCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
         }
         dialogAddUrl.show();
     }
