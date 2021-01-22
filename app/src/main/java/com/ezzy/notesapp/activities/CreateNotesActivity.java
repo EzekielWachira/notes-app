@@ -1,16 +1,28 @@
 package com.ezzy.notesapp.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +38,13 @@ import com.ezzy.notesapp.database.NoteDatabase;
 import com.ezzy.notesapp.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
+
+import javax.xml.transform.Result;
 
 public class CreateNotesActivity extends AppCompatActivity {
 
@@ -38,8 +53,13 @@ public class CreateNotesActivity extends AppCompatActivity {
     private View viewSubtitleIndicator;
     private ImageView imageNote;
     private LinearLayout layoutWebUrl;
+    private ImageView noteImage;
 
     private String selectedColor;
+    private String selectedImagePath;
+
+    private static final int REQUEST_STORAGE_PERMISSION_CODE = 1;
+    private static final int REQUEST_SELECT_IMAGE_CODE = 2;
 
     private AlertDialog dialogAddUrl;
 
@@ -58,6 +78,7 @@ public class CreateNotesActivity extends AppCompatActivity {
         viewSubtitleIndicator = findViewById(R.id.viewSubtitleIndicator);
         textWebUrl = findViewById(R.id.textWebUrl);
         layoutWebUrl = findViewById(R.id.layoutWebUrl);
+        noteImage = findViewById(R.id.imageNote);
 
         textDateTime.setText(
                 new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
@@ -73,6 +94,7 @@ public class CreateNotesActivity extends AppCompatActivity {
         });
 
         selectedColor = "#FFFFFF";
+        selectedImagePath = "";
 
         initMiscellaneous();
 
@@ -93,6 +115,7 @@ public class CreateNotesActivity extends AppCompatActivity {
         note.setNoteText(inputNoteText.getText().toString());
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedColor);
+        note.setImagePath(selectedImagePath);
 
         if (layoutWebUrl.getVisibility() == View.VISIBLE){
             note.setWebLink(textWebUrl.getText().toString());
@@ -207,6 +230,23 @@ public class CreateNotesActivity extends AppCompatActivity {
             }
         });
 
+        layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if (ContextCompat.checkSelfPermission(
+                        getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED
+                ){
+                    ActivityCompat.requestPermissions(CreateNotesActivity.this,
+                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQUEST_STORAGE_PERMISSION_CODE);
+                } else {
+                    selectImage();
+                }
+            }
+        });
+
         layoutMiscellaneous.findViewById(R.id.layoutAddUrl).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -261,5 +301,59 @@ public class CreateNotesActivity extends AppCompatActivity {
             });
         }
         dialogAddUrl.show();
+    }
+
+    private void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(getPackageManager()) != null){
+            startActivityForResult(intent, REQUEST_SELECT_IMAGE_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            selectImage();
+        } else {
+            makeToast("Permission denied!");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SELECT_IMAGE_CODE && resultCode == RESULT_OK){
+            if (data != null){
+                Uri imageUri = data.getData();
+                if (imageUri != null){
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                        Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
+                        noteImage.setImageBitmap(imageBitmap);
+                        noteImage.setVisibility(View.VISIBLE);
+
+                        selectedImagePath = getPathFromUri(imageUri);
+                    }catch (Exception e){
+                        makeToast(e.getMessage());
+                    }
+                }
+            }
+        }
+    }
+
+    private String getPathFromUri(Uri uri){
+        String filePath;
+        Cursor cursor = getContentResolver()
+                .query(uri, null, null, null, null);
+        if (cursor != null){
+            filePath = uri.getPath();
+        } else {
+             cursor.moveToFirst();
+             int index = cursor.getColumnIndex("'_data");
+             filePath = cursor.getString(index);
+             cursor.close();
+        }
+        return filePath;
     }
 }
