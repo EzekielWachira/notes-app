@@ -103,6 +103,18 @@ public class CreateNotesActivity extends AppCompatActivity {
             setOrUpdateNote();
         }
 
+        findViewById(R.id.imageDeleteUrl).setOnClickListener(v -> {
+            textWebUrl.setText(null);
+            layoutWebUrl.setVisibility(View.GONE);
+        });
+
+        findViewById(R.id.deleteImage).setOnClickListener(v -> {
+            imageNote.setImageBitmap(null);
+            imageNote.setVisibility(View.GONE);
+            findViewById(R.id.deleteImage).setVisibility(View.GONE);
+            selectedImagePath = "";
+        });
+
         initMiscellaneous();
 
         setSubtitleIndicatorColor();
@@ -117,6 +129,7 @@ public class CreateNotesActivity extends AppCompatActivity {
         if (savedNote.getImagePath() != null){
             noteImage.setImageBitmap(BitmapFactory.decodeFile(savedNote.getImagePath()));
             noteImage.setVisibility(View.VISIBLE);
+            findViewById(R.id.deleteImage).setVisibility(View.VISIBLE);
             selectedImagePath = savedNote.getImagePath();
         }
 
@@ -380,6 +393,7 @@ public class CreateNotesActivity extends AppCompatActivity {
                         Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
                         noteImage.setImageBitmap(imageBitmap);
                         noteImage.setVisibility(View.VISIBLE);
+                        findViewById(R.id.deleteImage).setVisibility(View.VISIBLE);
 
                         selectedImagePath = getPathFromUri(imageUri);
                     }catch (Exception e){
